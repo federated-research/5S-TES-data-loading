@@ -1,0 +1,19 @@
+name: tredata
+
+services:
+  omop-lite:
+    image: ghcr.io/health-informatics-uon/omop-lite
+    container_name: tredata-omop-lite
+    environment:
+      DB_PASSWORD: ${PG_PASSWORD}
+      DB_USER: ${PG_USER}
+      DB_HOST: ${PG_HOST}
+      DB_PORT: ${PG_TARGET_PORT}
+      DB_NAME: ${PG_DB}
+      DATA_DIR: /data
+      SCHEMA_NAME: ${PG_SCHEMA}
+      OMOP_VERSION: ${OMOP_VERSION}
+      SYNTHETIC: ${SYNTHETIC}
+      SYNTHETIC_NUMBER: ${SYNTHETIC_NUMBER}
+    volumes:
+      - ${OMOP_DATA_SOURCE}:/data

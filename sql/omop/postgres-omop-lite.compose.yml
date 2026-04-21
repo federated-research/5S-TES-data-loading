@@ -1,0 +1,47 @@
+name: tredata
+
+services:
+  postgres:
+    image: postgres:18
+    container_name: tredata-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+      POSTGRES_DB: ${PG_DB}
+    networks:
+      - tredata-net
+    ports:
+      - "${PG_TARGET_PORT}:5432"
+    volumes:
+      - postgresdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -q -U ${PG_USER} -d tredata"]
+
+  omop-lite:
+    image: ghcr.io/health-informatics-uon/omop-lite
+    container_name: tredata-omop-lite
+    depends_on: [postgres]
+    profiles: [init]
+    environment:
+      DB_PASSWORD: ${PG_PASSWORD}
+      DB_USER: ${PG_USER}
+      DB_HOST: postgres
+      DB_NAME: ${PG_DB}
+      DATA_DIR: /data
+      SCHEMA_NAME: ${PG_SCHEMA}
+      OMOP_VERSION: ${OMOP_VERSION}
+      SYNTHETIC: ${SYNTHETIC}
+      SYNTHETIC_NUMBER: ${SYNTHETIC_NUMBER}
+    networks:
+      - tredata-net
+    volumes:
+      - ${OMOP_DATA_SOURCE}:/data
+
+networks:
+  tredata-net:
+    name: tredata-net
+
+volumes:
+  postgresdata:
+    driver: local
