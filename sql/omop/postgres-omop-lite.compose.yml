@@ -23,16 +23,15 @@ services:
     container_name: tredata-omop-lite
     depends_on: [postgres]
     profiles: [init]
+    env_file:
+      - path: .env
+        required: false
     environment:
       DB_PASSWORD: ${PG_PASSWORD}
       DB_USER: ${PG_USER}
       DB_HOST: postgres
       DB_NAME: ${PG_DB}
       DATA_DIR: /data
-      SCHEMA_NAME: ${PG_SCHEMA}
-      OMOP_VERSION: ${OMOP_VERSION}
-      SYNTHETIC: ${SYNTHETIC}
-      SYNTHETIC_NUMBER: ${SYNTHETIC_NUMBER}
     networks:
       - tredata-net
     volumes:

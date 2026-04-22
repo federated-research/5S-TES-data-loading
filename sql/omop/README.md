@@ -18,7 +18,7 @@ A 1k Synthetic OMOP dataset is built in to `omop-lite`.
 
 Loading data is done by `omop-lite`. This is included in either sample `compose.yml`.
 
-The expected pattern for 5 Safes TES is that all TRE data is loaded to the same database (e.g. `tredata`) but then a schema per-project.
+The default expected pattern for 5 Safes TES is that all TRE data is loaded to the same database (e.g. `tredata`) but then a schema per-project.
 
 Shared data can be loaded to its own schema (e.g. `omop1k`) and then views created in each relevant project schema.
 
@@ -32,7 +32,7 @@ Note that `omop-lite` requires TSV files, with UPPERCASE table names and a `.csv
 
 ### `postgres-omop-lite.compose.yml`
 
-`docker compose up -d` will run only the postgres database, which has its data persisted to a volume.
+`docker compose -f postgres-omop-lite.compose.yml up -d` will run only the postgres database, which has its data persisted to a volume.
 The Postgres server can be mapped to a non-standard port to keep it out of the way of other postgres servers run on this host.
 
 `omop-lite` is under its own profile, so it doesn't run by default.
@@ -41,7 +41,7 @@ Recommended usage is:
 
 1. ensure data source files are present in the expected directory
     - or configure loading built-in synthetic data
-2. ensure the pg server is running (`docker compose up -d`)
+2. ensure the pg server is running (`docker compose -f postgres-omop-lite.compose.yml up -d`)
 3. Run `omop-lite` in the context of the same compose project:
     - `docker compose -f postgres-omop-lite.compose.yml run --rm omop-lite`
 
@@ -59,8 +59,8 @@ Recommended usage is:
 
 1. ensure data source files are present in the expected directory
     - or configure loading built-in synthetic data
-2. ensure the pg server is accessible
-3. Run `omop-lite` in the context of the same compose project:
+2. ensure the remote pg server is accessible
+3. Run `omop-lite`:
     - `docker compose -f omop-lite.compose.yml run --rm omop-lite`
 
 It will clean up the `omop-lite` container when complete because of the `--rm` flag.

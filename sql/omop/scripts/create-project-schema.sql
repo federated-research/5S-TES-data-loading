@@ -1,1 +1,1 @@
-create schema "CaseSensitive5sTesProjectName"
+create schema "CaseSensitive5sTesProjectName";
